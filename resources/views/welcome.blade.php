@@ -13,7 +13,7 @@
 
                             <a href="/show/{{$image->id}}" class="btn btn-info my-button ">Show</a>
 
-                            <a href="/edit" class="btn btn-warning my-button ">Edit</a>
+                            <a href="/edit/{{$image->id}}" class="btn btn-warning my-button ">Edit</a>
 
                             <a href="#" class="btn btn-danger my-button ">Delete</a>
                         </div>
