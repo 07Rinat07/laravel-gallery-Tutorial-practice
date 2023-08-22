@@ -71,3 +71,11 @@ Route::post('/update/{id}', function (Request $request, $id) {
     return redirect('/');
 
 });
+
+Route::get('/delete/{id}', function ($id) {
+    $image = DB::table('images')->select('*')->where('id', $id)->first();
+    Storage::delete($image->image);
+
+    DB::table('images')->where('id', $id)->delete();
+    return redirect('/');
+});

@@ -15,7 +15,7 @@
 
                             <a href="/edit/{{$image->id}}" class="btn btn-warning my-button ">Edit</a>
 
-                            <a href="#" class="btn btn-danger my-button ">Delete</a>
+                            <a href="/delete/{{$image->id}}" onclick="return confirm('Are you sure?')" class="btn btn-danger my-button ">Delete</a>
                         </div>
             @endforeach
 
