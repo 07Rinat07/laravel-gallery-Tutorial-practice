@@ -4,13 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Services\ImageService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 
 class ImagesController extends Controller
 {
 
     private $images;
+
     public function __construct(ImageService $imageService)
     {
         $this->images = $imageService;
@@ -30,26 +29,22 @@ class ImagesController extends Controller
     function store(\Illuminate\Http\Request $request)
     {
         $image = $request->file('image');
-        $filename = $request->image->store('uploads');
 
-        DB::table('images')->insert([
-                'image' => $filename]
-        );
+        $this->images->add($image);
+
         return redirect('/');
     }
 
     function show($id)
     {
-        $image = DB::table('images')->select('*')->where('id', $id)->first();
-        $myImage = $image->image;
+        $myImage = $this->images->one($id);
 
-
-        return view('show', ['imageInView' => $myImage]);
+        return view('show', ['imageInView' => $myImage->image]);
     }
 
     function edit($id)
     {
-        $image = DB::table('images')->select('*')->where('id', $id)->first();
+        $image = $this->images->one($id);
 
 
         return view('edit', ['imageInView' => $image]);
@@ -57,24 +52,15 @@ class ImagesController extends Controller
 
     function update(Request $request, $id)
     {
-        $image = DB::table('images')->select('*')->where('id', $id)->first();
-        Storage::delete($image->image);
-
-        $filename = $request->image->store('uploads');
-
-        DB::table('images')
-            ->where('id', $id)
-            ->update(['image' => $filename]);
+        $this->images->update($id, $request->image);
 
         return redirect('/');
     }
 
     function delete($id)
     {
-        $image = DB::table('images')->select('*')->where('id', $id)->first();
-        Storage::delete($image->image);
+        $this->images->delete($id);
 
-        DB::table('images')->where('id', $id)->delete();
         return redirect('/');
     }
 }
